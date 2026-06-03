@@ -50,8 +50,19 @@ jobs:
       - name: Push Docker image to ECR
         run: |
           ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-          docker push $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest
-
+          REPOSITORY_URI=$ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY
+          
+          # Create repository if it doesn't exist
+          aws ecr describe-repositories \
+            --repository-names $ECR_REPOSITORY \
+            --region $AWS_REGION || \
+          aws ecr create-repository \
+            --repository-name $ECR_REPOSITORY \
+            --region $AWS_REGION
+    
+      # Push the image
+        docker push $REPOSITORY_URI:latest
+        
       - name: Force ECS new deployment
         run: |
           aws ecs update-service \
