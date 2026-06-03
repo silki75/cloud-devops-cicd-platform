@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "app/**"
+      - "azure-app/**"
       - ".github/workflows/azure-container-apps-deploy.yml"
 
 permissions:
@@ -47,7 +47,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ steps.image.outputs.image }} -t ${{ steps.image.outputs.image_latest }} ./app
+          docker build -t ${{ steps.image.outputs.image }} -t ${{ steps.image.outputs.image_latest }} ./azure-app
 
       - name: Push Docker image to GHCR
         run: |
