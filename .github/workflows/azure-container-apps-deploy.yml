@@ -1,6 +1,7 @@
 name: Azure Container Apps CI/CD Deploy
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
